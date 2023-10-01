@@ -2,6 +2,7 @@
 module Main where
 
 import SDL
+import qualified SDL.Font as TTF
 import Linear (V4(..))
 import Control.Monad (unless)
 import Control.Monad.State
@@ -113,9 +114,20 @@ appLoop state renderer = do
 main :: IO ()
 main = do
     initializeAll
+    TTF.initialize
     window <- createWindow "My SDL Application" windowConfig
     renderer <- createRenderer window (-1) defaultRenderer
+    font <- TTF.load "/usr/share/fonts/TTF/DejaVuSansMono.ttf" 60
+    text <- TTF.solid font (V4 255 0 0 255) "TEST"
+    TTF.free font
+    screen <- SDL.getWindowSurface window
+    SDL.surfaceBlit text Nothing screen Nothing
+    SDL.freeSurface text
+    SDL.updateWindowSurface window
     startField <- initialField
     let initialState = GameState { field = startField, lastTimestamp = 0 }
     appLoop initialState renderer
     destroyWindow window
+
+    SDL.quit
+    TTF.quit

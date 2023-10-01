@@ -31,6 +31,7 @@ executable automata-games
     -- other-extensions:
     build-depends:
         sdl2,
+        sdl2-ttf,
         linear,
         array,
         mtl,
